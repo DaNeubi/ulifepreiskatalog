@@ -185,12 +185,10 @@ import { Component,Vue } from 'vue-property-decorator';
 import cars from '@/preDefined/cars';
 import IVehicle from '../types/IVehicles'
 import jobs from "@/preDefined/jobs";
-import IJob, {IJobStep} from "@/types/IJob";
-import IVehicles from "../types/IVehicles";
+import IJob from "@/types/IJob";
 import roundUp from "@/utils/roundUp";
 import kmToMiles from "@/utils/kmToMiles";
 import roundMultiple from "@/utils/roundMultiple";
-import getAverage from "@/utils/getAverage";
 import IJobStepCalculation from "@/types/IJobStepCalculation";
 import IJobCalculation from "@/types/IJobCalculation";
 
