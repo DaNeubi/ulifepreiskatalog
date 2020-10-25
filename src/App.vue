@@ -19,7 +19,7 @@
         <span transition="scale-transition">JO-Cloud</span>
       </div>
       <v-spacer></v-spacer>
-      <span class="d-none d-sm-flex">Danke an Seb für die Daten aus seinem Preiskatalog:
+      <span class="d-none d-sm-flex">Vielen Dank an Seb für die Daten aus seinem Preiskatalog:
         <a href="https://docs.google.com/spreadsheets/d/13pvY4JKA2erg9-9wXV4gs5v0bR-ebuSgd0B8xOHlynA/edit#gid=0"
            style="color: red; text-decoration: none;" target="_blank">HIER</a></span>
     </v-app-bar>
