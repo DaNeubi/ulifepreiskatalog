@@ -373,7 +373,7 @@ export default class Configurator extends Vue{
       let fullCapacity = (this.useTrousers ? this.currentTrousersCapacity : 0)
           + (this.useBigBag ? this.currentBigBagCapacity : 0);
       this.currentlySelectedCars.forEach((vehicle) => {
-        fullCapacity = fullCapacity + vehicle.capacity;
+        fullCapacity = fullCapacity + (vehicle.capacity * vehicle.amount);
       });
       return fullCapacity;
     }

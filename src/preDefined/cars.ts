@@ -12,7 +12,7 @@ const cars: IVehicle[] = [
     {
         id: 1,
         name: "Diverse",
-        speed: 80,
+        speed: 65,
         capacity: 15000,
         amount: 1,
         active: true
@@ -28,7 +28,7 @@ const cars: IVehicle[] = [
     {
         id: 3,
         name: "Mule",
-        speed: 70,
+        speed: 65,
         capacity: 60000,
         amount: 1,
         active: true
@@ -36,7 +36,7 @@ const cars: IVehicle[] = [
     {
         id: 4,
         name: "Rubble",
-        speed: 70,
+        speed: 65,
         capacity: 60000,
         amount: 1,
         active: true
@@ -44,7 +44,7 @@ const cars: IVehicle[] = [
     {
         id: 5,
         name: "Benson",
-        speed: 75,
+        speed: 65,
         capacity: 75000,
         amount: 1,
         active: true
@@ -52,7 +52,7 @@ const cars: IVehicle[] = [
     {
         id: 6,
         name: "Pounder",
-        speed: 70,
+        speed: 65,
         capacity: 105000,
         amount: 1,
         active: true
