@@ -1,6 +1,6 @@
 <template>
-    <div>
-        <v-row no-gutters class="mt-2">
+    <v-container>
+        <v-row no-gutters class="pa-2">
             <v-col cols="12" xs="12" sm="12" md="3" lg="2">
                 Verfügbare Kapazität: <b>{{currentCapacity | fancyUnits}}</b><br/>
                 <v-divider/>
@@ -49,7 +49,7 @@
                 <v-text-field v-model.number="playerAmount" outlined dense type="number" min="1" hide-details/>
             </v-col>
         </v-row>
-        <v-row no-gutters>
+        <v-row no-gutters class="pa-2">
             <v-col cols="12" xs="12" sm="12" md="2" lg="2">
                 Hosentasche:
                 <v-text-field v-model.number="currentTrousersCapacity" outlined dense type="number" min="0"
@@ -95,7 +95,6 @@
                       {{jobCalculation.job.name}} - {{ (calculateProfitPerPersonPerSecond(jobCalculation)
                         * 60 * 60).toFixed(2)}} - Pro Person $ pro Stunde</v-expansion-panel-header>
                     <v-expansion-panel-content :color="jobCalculation.job.jobColor[1]">
-                        <v-container>
                             <v-row>
                                 <v-col v-for="(jobStepCalculation, jobStepIndex) in jobCalculation.steps"
                                        :key="jobStepCalculation.jobStep.sourceName" cols="6" xs="12" sm="4" md="3" lg="3" >
@@ -162,7 +161,6 @@
                                             Gewinn [$]
                                         </v-col>
                                         <v-col>
-                                          <!-- Hier ist noch ein Kalkulationsfehler -->
                                           {{jobCalculation.profit}}
                                         </v-col>
                                     </v-row>
@@ -176,12 +174,11 @@
                                     </v-row>
                                 </v-col>
                             </v-row>
-                        </v-container>
                     </v-expansion-panel-content>
                 </v-expansion-panel>
             </v-expansion-panels>
         </v-row>
-    </div>
+    </v-container>
 </template>
 
 <script lang="ts">

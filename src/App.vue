@@ -9,7 +9,7 @@
         <a href="https://preiskatalog.jobermeier.cloud">
           <v-img
               alt="JO-Cloud Logo"
-              class="shrink mr-2"
+              class="shrink pr-2"
               contain
               src="@/assets/logo.png"
               transition="scale-transition"
@@ -70,10 +70,12 @@ Styling the footer links
   text-decoration: none;
   color: white;
 }
+
+/*noinspection CssInvalidPropertyValue*/
 .sahnee-hosting{
-  -webkit-text-fill-color: transparent;
-  background: -webkit-linear-gradient(left, pink, lightblue);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+  background-image: linear-gradient(to right, pink, lightblue);
+  background-clip: text;
+  color: transparent;
 }
+
 </style>
