@@ -252,7 +252,7 @@ export default class Configurator extends Vue{
      * Calculates multiple Jobs
      */
     calculateJobs(jobs: IJob[]){
-      return jobs.map(job => this.calculateJob(job));
+      return jobs.map(job => this.calculateJob(job)).sort((a,b) => this.calculateProfitPerPersonPerSecond(b) - this.calculateProfitPerPersonPerSecond(a));
     }
 
     /***
