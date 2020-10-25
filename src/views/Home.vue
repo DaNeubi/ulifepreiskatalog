@@ -96,6 +96,11 @@
                         * 60 * 60).toFixed(2)}} - Pro Person $ pro Stunde</v-expansion-panel-header>
                     <v-expansion-panel-content :color="jobCalculation.job.jobColor[1]">
                             <v-row>
+                              <v-col class="text-center pb-0">
+                                <b>[{{jobCalculation.job.stepsDescription}}] - [{{jobCalculation.job.toolRequired}}]</b>
+                              </v-col>
+                            </v-row>
+                            <v-row>
                                 <v-col v-for="(jobStepCalculation, jobStepIndex) in jobCalculation.steps"
                                        :key="jobStepCalculation.jobStep.sourceName" cols="6" xs="12" sm="4" md="3" lg="3" >
                                     <v-row>
