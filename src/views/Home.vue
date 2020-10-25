@@ -1,6 +1,6 @@
 <template>
     <div>
-        <v-row no-gutters>
+        <v-row no-gutters class="mt-2">
             <v-col cols="12" xs="12" sm="12" md="3" lg="2">
                 Verfügbare Kapazität: <b>{{currentCapacity | fancyUnits}}</b><br/>
                 <v-divider/>
@@ -97,13 +97,17 @@
                     <v-expansion-panel-content :color="jobCalculation.job.jobColor[1]">
                         <v-container>
                             <v-row>
-                                <v-col v-for="jobStepCalculation in jobCalculation.steps"
-                                       :key="jobStepCalculation.jobStep.sourceName" cols="3" >
+                                <v-col v-for="(jobStepCalculation, jobStepIndex) in jobCalculation.steps"
+                                       :key="jobStepCalculation.jobStep.sourceName" cols="6" xs="12" sm="4" md="3" lg="3" >
                                     <v-row>
                                         <v-col class="text-center">
-                                            <h3>{{ jobStepCalculation.jobStep.sourceName }} -
-                                              {{ jobStepCalculation.jobStep.ingredientRatio[0] + ':' +
-                                              jobStepCalculation.jobStep.ingredientRatio[1] }}</h3>
+                                            <h3><span class="d-sm-none">{{jobStepIndex + 1}}. </span>
+                                              {{ jobStepCalculation.jobStep.sourceName }} -
+                                              {{ jobStepIndex === 0 ?
+                                                  jobStepCalculation.jobStep.amountOfIngredientsPerCycle[0] === jobStepCalculation.jobStep.amountOfIngredientsPerCycle[1] ?
+                                                      jobStepCalculation.jobStep.amountOfIngredientsPerCycle[0] : jobStepCalculation.jobStep.amountOfIngredientsPerCycle[0]
+                                                      + '-' + jobStepCalculation.jobStep.amountOfIngredientsPerCycle[1] : jobStepCalculation.jobStep.ingredientRatio[0]
+                                                  + ':' + jobStepCalculation.jobStep.ingredientRatio[1] }}</h3>
                                         </v-col>
                                     </v-row>
                                     <v-row>
@@ -139,7 +143,7 @@
                                         </v-col>
                                     </v-row>
                                 </v-col>
-                                <v-col>
+                                <v-col cols="6" xs="12" sm="4" md="4" lg="2">
                                     <v-row>
                                         <v-col class="text-center">
                                             <h3>Summe</h3>

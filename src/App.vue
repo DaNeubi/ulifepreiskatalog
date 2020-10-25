@@ -19,9 +19,9 @@
         <span transition="scale-transition">JO-Cloud</span>
       </div>
       <v-spacer></v-spacer>
-      <span>Danke an Seb für die Daten aus seinem Preiskatalog:
+      <span class="d-none d-sm-flex">Danke an Seb für die Daten aus seinem Preiskatalog:
         <a href="https://docs.google.com/spreadsheets/d/13pvY4JKA2erg9-9wXV4gs5v0bR-ebuSgd0B8xOHlynA/edit#gid=0"
-           style="color: red; text-decoration: none;">HIER</a></span>
+           style="color: red; text-decoration: none;" target="_blank">HIER</a></span>
     </v-app-bar>
     <v-main>
       <router-view>
@@ -34,10 +34,13 @@
         </v-col>
         <v-col>
           <span class="white--text">Hosting with <v-icon color="white">mdi-heart-outline</v-icon> by
-            <a class="footer-links sahnee-hosting" href="https://sahnee.dev">Sahnee.dev</a></span>
+            <a class="footer-links sahnee-hosting" href="https://sahnee.dev" target="_blank">Sahnee.dev</a></span>
         </v-col>
         <v-col>
-          <span class="white--text"><a class="footer-links" href="https://sahnee.dev/de/impressum/">Impressum</a></span>
+          <a href="https://github.com/DaNeubi/ulifepreiskatalog" target="_blank"><v-icon color="white">mdi-github</v-icon></a>
+        </v-col>
+        <v-col>
+          <span class="white--text"><a class="footer-links" href="https://sahnee.dev/de/impressum/" target="_blank">Impressum</a></span>
         </v-col>
       </v-row>
     </v-footer>
