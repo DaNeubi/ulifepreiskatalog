@@ -6,7 +6,7 @@
       dark
     >
       <div class="d-flex align-center">
-        <a href="https://preisliste.jobermeier.cloud">
+        <a href="https://preiskatalog.jobermeier.cloud">
           <v-img
               alt="JO-Cloud Logo"
               class="shrink mr-2"
