@@ -45,7 +45,7 @@
                           :label="'Schleifenfahrt verwenden: ' + (useSchleifenfahrt? 'Ja' : 'Nein')"/>
             </v-col>
             <v-col cols="12" xs="12" sm="12" md="3" lg="3">
-                Anzahl der Spieler:
+                Anzahl der Personen:
                 <v-text-field v-model.number="playerAmount" outlined dense type="number" min="1" hide-details/>
             </v-col>
         </v-row>
