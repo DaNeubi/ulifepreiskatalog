@@ -6,7 +6,7 @@ const cars: IVehicle[] = [
         name: "Rusty",
         speed: 65,
         capacity: 12000,
-        amount: 1,
+        amount: 0,
         active: true
     },
     {
@@ -14,7 +14,7 @@ const cars: IVehicle[] = [
         name: "Diverse",
         speed: 65,
         capacity: 15000,
-        amount: 1,
+        amount: 0,
         active: true
     },
     {
@@ -22,7 +22,7 @@ const cars: IVehicle[] = [
         name: "Tipper",
         speed: 65,
         capacity: 45000,
-        amount: 1,
+        amount: 0,
         active: true
     },
     {
@@ -30,7 +30,7 @@ const cars: IVehicle[] = [
         name: "Mule",
         speed: 65,
         capacity: 60000,
-        amount: 1,
+        amount: 0,
         active: true
     },
     {
@@ -38,7 +38,7 @@ const cars: IVehicle[] = [
         name: "Rubble",
         speed: 65,
         capacity: 60000,
-        amount: 1,
+        amount: 0,
         active: true
     },
     {
@@ -46,7 +46,7 @@ const cars: IVehicle[] = [
         name: "Benson",
         speed: 65,
         capacity: 75000,
-        amount: 1,
+        amount: 0,
         active: true
     },
     {
@@ -54,7 +54,7 @@ const cars: IVehicle[] = [
         name: "Pounder",
         speed: 65,
         capacity: 105000,
-        amount: 1,
+        amount: 0,
         active: true
     },
     {

@@ -1,95 +1,105 @@
 <template>
     <v-container>
+      <v-card class="mb-4" elevation="6">
+        <v-card-title>Einstellungsmöglichkeiten</v-card-title>
+        <v-card-text>
         <v-row no-gutters class="pa-2">
             <v-col cols="12" xs="12" sm="12" md="3" lg="2">
-                Verfügbare Kapazität: <b>{{currentCapacity | fancyUnits}}</b><br/>
-                <v-divider/>
                 Modifikatoren:
               <v-col xs="12" sm="12" md="12" lg="12" cols="12">
                 <v-tooltip bottom v-if="useVehicleSpeed">
                   <template v-slot:activator="{ on, attrs }">
-                    <v-icon v-on="on" v-bind="attrs">mdi-truck-fast</v-icon>
+                    <v-icon v-on="on" v-bind="attrs" color="green">mdi-truck-fast</v-icon>
                   </template>
                   <span><u>Fahrzeuggeschwindigkeit</u> wird mit einberechnet</span>
                 </v-tooltip>
                 <v-tooltip bottom v-if="useRunWays">
                   <template v-slot:activator="{ on, attrs }">
-                    <v-icon v-on="on" v-bind="attrs">mdi-run-fast</v-icon>
+                    <v-icon v-on="on" v-bind="attrs" color="green">mdi-run-fast</v-icon>
                   </template>
                   <span><u>Laufwege</u> werden mit einberechnet</span>
                 </v-tooltip>
                 <v-tooltip bottom v-if="useUmpacken">
                   <template v-slot:activator="{ on, attrs }">
-                    <v-icon v-on="on" v-bind="attrs">mdi-package-variant</v-icon>
+                    <v-icon v-on="on" v-bind="attrs" color="green">mdi-package-variant</v-icon>
                   </template>
                   <span>Zeit für's <u>Umpacken</u> wird mit einberechnet</span>
                 </v-tooltip>
                 <v-tooltip bottom v-if="useSchleifenfahrt">
                   <template v-slot:activator="{ on, attrs }">
-                    <v-icon v-on="on" v-bind="attrs">mdi-sync</v-icon>
+                    <v-icon v-on="on" v-bind="attrs" color="green">mdi-sync</v-icon>
                   </template>
                   <span><u>Schleifenfahrt</u> wird mit einberechnet. <u>Schleifenfahrt</u> ist der Weg vom Verkauf zurück zur 1. Station</span>
                 </v-tooltip>
               </v-col>
             </v-col>
             <v-col cols="12" sm="12" xs="12" md="3" lg="3">
-                <v-switch class="ma-0" v-model="useVehicleSpeed"
-                          :label="'Fahrzeuggeschwindigkeit einberechnen: ' + (useVehicleSpeed ? 'Ja' : 'Nein')"/>
-              <v-switch class="ma-0" v-model="useRunWays"
-                        :label="'Laufwege einberechnen: ' + (useRunWays ? 'Ja' : 'Nein')"/>
-            </v-col>
-            <v-col cols="12" xs="12" sm="12" md="3" lg="3">
-                <v-switch class="ma-0" v-model="useUmpacken"
-                          :label="'Umpacken einberechnen: ' + (useUmpacken? 'Ja' : 'Nein')"/>
-                <v-switch class="ma-0" v-model="useSchleifenfahrt"
-                          :label="'Schleifenfahrt verwenden: ' + (useSchleifenfahrt? 'Ja' : 'Nein')"/>
-            </v-col>
-            <v-col cols="12" xs="12" sm="12" md="3" lg="3">
-                Anzahl der Personen:
-                <v-text-field v-model.number="playerAmount" outlined dense type="number" min="1" hide-details/>
-            </v-col>
-        </v-row>
-        <v-row no-gutters class="pa-2">
-            <v-col cols="12" xs="12" sm="12" md="2" lg="2">
-                Hosentasche:
-                <v-text-field v-model.number="currentTrousersCapacity" outlined dense type="number" min="0"
-                              hide-details class="pa-0 ma-0"/>
-                <v-switch v-model="useTrousers" class="ma-0" @change="updateAvailableCapacity()"/>
-            </v-col>
-            <v-divider vertical class="ml-2 mr-2"/>
-            <v-col cols="12" xs="12" sm="12" md="2" lg="2">
-                Große Tasche:
-                <v-text-field v-model.number="currentBigBagCapacity" outlined dense type="number" min="0" hide-details/>
-                <v-switch v-model="useBigBag" class="ma-0" @change="updateAvailableCapacity()"/>
-            </v-col>
-            <v-divider vertical class="ml-2 mr-2"/>
-            <v-col cols="12" xs="12" sm="12" md="2" lg="2">
-                Verfügbare Fahrzeuge:
-                <v-autocomplete v-model="currentlySelectedCars" outlined :items="allCars" item-text="name"
-                                multiple item-value="id" chips deletable-chips return-object
-                                @change="vehicleProgress()"/>
-            </v-col>
-            <v-divider vertical class="ml-2"></v-divider>
-            <v-col cols="12" xs="12" sm="12" md="5" lg="5">
-                <v-slide-group mandatory multiple show-arrows class="pa-3">
-                    <v-slide-item v-for="car in currentlySelectedCars" :key="car.name">
-                        <v-card elevation="5" class="ma-1">
-                            <v-card-text><b>{{car.name}}</b></v-card-text>
-                            <v-card-text>
-                                Kapazität:<br/>
-                                {{car.capacity | fancyUnits}}
-                                <v-switch v-model="car.active" @change="updateAvailableCapacity()"/>
-                                <v-text-field v-model.number="car.amount" outlined dense type="number" min="0"
-                                              hide-details @change="updateAvailableCapacity()"
-                                              @click="updateAvailableCapacity()"/>
-                            </v-card-text>
-                        </v-card>
-                    </v-slide-item>
-                </v-slide-group>
+              <v-checkbox hide-details v-model="useVehicleSpeed" class="ma-0" label="Fahrzeuggeschwindigkeit"/>
+              <v-checkbox hide-details v-model="useRunWays" class="ma-0" label="Laufwege"/>
+              <v-checkbox hide-details v-model="useUmpacken" class="ma-0" label="Umpacken"/>
+              <v-checkbox hide-details v-model="useSchleifenfahrt" class="ma-0" label="Schleifenfahrt"/>
             </v-col>
         </v-row>
         <v-row>
-            <v-expansion-panels accordion>
+          <v-col>
+            Anzahl der Personen:
+            <v-text-field v-model.number="playerAmount" outlined dense type="number" min="1" hide-details @click="updateAvailableCapacity()"/>
+          </v-col>
+          <v-col>
+            Hosentasche:
+            <v-text-field v-model.number="currentTrousersCapacity" outlined dense type="number" min="0"
+                          hide-details class="pa-0 ma-0"/>
+            <v-checkbox hide-details v-model="useTrousers" class="ma-0" :label=" useTrousers ? 'Verwendet' : 'Nicht verwendet'" @change="updateAvailableCapacity()"/>
+          </v-col>
+          <v-col>
+            Große Tasche:
+            <v-text-field v-model.number="currentBigBagCapacity" outlined dense type="number" min="0" hide-details/>
+            <v-checkbox hide-details v-model="useBigBag" class="ma-0" :label=" useBigBag ? 'Verwendet' : 'Nicht verwendet'" @change="updateAvailableCapacity()"/>
+          </v-col>
+        </v-row>
+          <h2>Verfügbare Kapazität: <b>{{currentCapacity | fancyUnits}}</b><br/></h2>
+        <v-row no-gutters>
+            <v-col>
+                Verfügbare Fahrzeuge:
+              <v-autocomplete :value="currentlySelectedCars" outlined :items="allCars" item-text="name"
+                              multiple item-value="id" chips deletable-chips return-object
+                              @change="vehicleProgress()">
+                <template v-slot:item="{ item }" >
+                  <v-list-item @click="updateCurrentlySelectedVehicles(item,1)" :disabled="item.amount > 0">
+                    <v-list-item-content>
+                      {{ item.name }}
+                    </v-list-item-content>
+                  </v-list-item>
+                </template>
+                <template v-slot:selection="{ item }">
+                  <v-chip close
+                          @click:close="updateCurrentlySelectedVehicles(item,2)"
+                          :close-icon="item.amount > 1 ? 'mdi-minus-circle' : 'mdi-close-circle'"
+                  ><v-icon size="18" @click="updateCurrentlySelectedVehicles(item,1)" class="pr-1">mdi-plus-circle</v-icon> {{item.name}} ({{item.amount}})
+                  </v-chip>
+                </template>
+              </v-autocomplete>
+            </v-col>
+            <v-expansion-panels accordion v-if="expertMode">
+              <v-expansion-panel v-for="car in currentlySelectedCars" :key="car.name">
+                <v-expansion-panel-header>{{car.name}} -- Kapazität: {{car.capacity * car.amount | fancyUnits()}} -- Anzahl: {{car.amount}}</v-expansion-panel-header>
+                <v-expansion-panel-content>
+                  <v-row>
+                    <v-col>
+                    Kapazität:
+                    <v-text-field v-model.number="car.capacity" outlined dense type="number" min="0"/>
+                    Geschwindigkeit:
+                    <v-text-field v-model.number="car.speed" outlined dense type="number" min="0"/>
+                    </v-col>
+                  </v-row>
+                </v-expansion-panel-content>
+              </v-expansion-panel>
+            </v-expansion-panels>
+        </v-row>
+        </v-card-text>
+      </v-card>
+        <v-row>
+            <v-expansion-panels accordion class="pl-3 pr-3">
                 <v-expansion-panel v-for="jobCalculation in calculateJobs(allJobs)" :key="jobCalculation.job.id">
                     <v-expansion-panel-header :color="jobCalculation.job.jobColor[0]" v-ripple>
                       {{jobCalculation.job.name}} - {{ (calculateProfitPerPersonPerSecond(jobCalculation)
@@ -201,6 +211,7 @@ import IJobCalculation from "@/types/IJobCalculation";
 @Component
 export default class Configurator extends Vue{
     /* Variables */
+    expertMode = false;
 
     /* Inventory*/
     currentTrousersCapacity = 1000;
@@ -387,7 +398,7 @@ export default class Configurator extends Vue{
      * Get the maximum available Capacity for the current selection
      */
     updateAvailableCapacity(){
-        let fullCapacity = (this.useTrousers ? this.currentTrousersCapacity : 0)
+        let fullCapacity = (this.useTrousers ? this.currentTrousersCapacity * this.playerAmount : 0)
             + (this.useBigBag ? this.currentBigBagCapacity : 0);
         this.currentlySelectedCars.forEach((item) => {
             if(item.active){
@@ -407,6 +418,41 @@ export default class Configurator extends Vue{
             fullSpeed = fullSpeed + car.speed;
         });
         return fullSpeed / this.currentlySelectedCars.length;
+    }
+
+  /***
+   * Updates the array of currently selected cars
+   * @param currentVehicle the vehicle
+   * @param mathType 1: add; 2: substract
+   */
+    updateCurrentlySelectedVehicles(currentVehicle: IVehicle, mathType: number){
+      const vehicle = this.currentlySelectedCars.find(vehicle => vehicle.id === currentVehicle.id);
+      if(vehicle !== undefined){
+        switch (mathType){
+          case 1:
+            vehicle.amount++;
+            this.updateAvailableCapacity();
+            break;
+          case 2:
+            //check if vehicle needs to be deleted from the array
+            if((vehicle.amount - 1) > 0){
+              vehicle.amount--;
+            }
+            else{
+              vehicle.amount--;
+              Vue.delete(this.currentlySelectedCars, this.currentlySelectedCars.findIndex(vehicle => vehicle.id === currentVehicle.id))
+            }
+            this.updateAvailableCapacity();
+            break;
+          default:
+            break;
+        }
+      }
+      else{
+        this.currentlySelectedCars.push(currentVehicle);
+        currentVehicle.amount++;
+      }
+      console.log(this.currentlySelectedCars)
     }
 
 }
