@@ -3,41 +3,43 @@
       <v-card class="mb-4" elevation="6">
         <v-card-title>Einstellungsmöglichkeiten</v-card-title>
         <v-card-text>
-        <v-row no-gutters class="pa-2">
-            <v-col cols="12" xs="12" sm="12" md="3" lg="2">
-                Modifikatoren:
-              <v-col xs="12" sm="12" md="12" lg="12" cols="12">
-                <v-tooltip bottom v-if="useVehicleSpeed">
+        <v-row no-gutters>
+            <v-col>
+                <h3>Modifikatoren:</h3>
+              <v-col>
+                <v-tooltip bottom>
                   <template v-slot:activator="{ on, attrs }">
-                    <v-icon v-on="on" v-bind="attrs" color="green">mdi-truck-fast</v-icon>
+                    <v-icon v-on="on" v-bind="attrs" :color="useVehicleSpeed ? 'green' : 'grey'"
+                            @click="useVehicleSpeed ? useVehicleSpeed = false : useVehicleSpeed = true"
+                            size="30">mdi-truck-fast</v-icon>
                   </template>
-                  <span><u>Fahrzeuggeschwindigkeit</u> wird mit einberechnet</span>
+                  <span><u>Fahrzeuggeschwindigkeit</u> wird {{useVehicleSpeed ? '' : 'nicht'}} mit einberechnet</span>
                 </v-tooltip>
-                <v-tooltip bottom v-if="useRunWays">
+                <v-tooltip bottom>
                   <template v-slot:activator="{ on, attrs }">
-                    <v-icon v-on="on" v-bind="attrs" color="green">mdi-run-fast</v-icon>
+                    <v-icon v-on="on" v-bind="attrs" :color="useRunWays ? 'green' : 'grey'"
+                            @click="useRunWays ? useRunWays = false : useRunWays = true"
+                            size="30">mdi-run-fast</v-icon>
                   </template>
-                  <span><u>Laufwege</u> werden mit einberechnet</span>
+                  <span><u>Laufwege</u> werden {{useRunWays ? '' : 'nicht'}} mit einberechnet</span>
                 </v-tooltip>
-                <v-tooltip bottom v-if="useUmpacken">
+                <v-tooltip bottom>
                   <template v-slot:activator="{ on, attrs }">
-                    <v-icon v-on="on" v-bind="attrs" color="green">mdi-package-variant</v-icon>
+                    <v-icon v-on="on" v-bind="attrs" :color="useUmpacken ? 'green' : 'grey'"
+                            @click="useUmpacken ? useUmpacken = false : useUmpacken = true"
+                            size="30">mdi-package-variant</v-icon>
                   </template>
-                  <span>Zeit für's <u>Umpacken</u> wird mit einberechnet</span>
+                  <span>Zeit für's <u>Umpacken</u> wird {{useUmpacken ? '' : 'nicht'}} mit einberechnet</span>
                 </v-tooltip>
-                <v-tooltip bottom v-if="useSchleifenfahrt">
+                <v-tooltip bottom>
                   <template v-slot:activator="{ on, attrs }">
-                    <v-icon v-on="on" v-bind="attrs" color="green">mdi-sync</v-icon>
+                    <v-icon v-on="on" v-bind="attrs" :color="useSchleifenfahrt ? 'green' : 'grey'"
+                            @click="useSchleifenfahrt ? useSchleifenfahrt = false : useSchleifenfahrt = true"
+                            size="30">mdi-sync</v-icon>
                   </template>
-                  <span><u>Schleifenfahrt</u> wird mit einberechnet. <u>Schleifenfahrt</u> ist der Weg vom Verkauf zurück zur 1. Station</span>
+                  <span><u>Schleifenfahrt</u> wird mit {{useSchleifenfahrt ? '' : 'nicht'}} einberechnet. <u>Schleifenfahrt</u> ist der Weg vom Verkauf zurück zur 1. Station</span>
                 </v-tooltip>
               </v-col>
-            </v-col>
-            <v-col cols="12" sm="12" xs="12" md="3" lg="3">
-              <v-checkbox hide-details v-model="useVehicleSpeed" class="ma-0" label="Fahrzeuggeschwindigkeit"/>
-              <v-checkbox hide-details v-model="useRunWays" class="ma-0" label="Laufwege"/>
-              <v-checkbox hide-details v-model="useUmpacken" class="ma-0" label="Umpacken"/>
-              <v-checkbox hide-details v-model="useSchleifenfahrt" class="ma-0" label="Schleifenfahrt"/>
             </v-col>
         </v-row>
         <v-row>
@@ -448,11 +450,10 @@ export default class Configurator extends Vue{
             break;
         }
       }
-      else{
+      else {
         this.currentlySelectedCars.push(currentVehicle);
         currentVehicle.amount++;
       }
-      console.log(this.currentlySelectedCars)
     }
 
 }
