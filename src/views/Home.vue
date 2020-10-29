@@ -453,6 +453,7 @@ export default class Configurator extends Vue{
       else {
         this.currentlySelectedCars.push(currentVehicle);
         currentVehicle.amount++;
+        this.updateAvailableCapacity();
       }
     }
 
