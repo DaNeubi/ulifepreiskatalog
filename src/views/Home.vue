@@ -1,6 +1,102 @@
 <template>
     <v-container>
-      <v-card class="mb-4" elevation="6">
+      <v-toolbar dense>
+        <v-toolbar-title>Modus:</v-toolbar-title>
+        <v-switch v-model="expertModeSwitch" hide-details :label="expertMode ? 'Experten Modus' : 'Normaler Modus'"
+        class="pl-5 pr-5" @click="expertModeFunction()"/>
+        <v-btn v-if="expertMode" color="error" @click="resetDialog = true;">
+          Zurücksetzen
+        </v-btn>
+      </v-toolbar>
+      <v-dialog v-model="expertModeDialog" width="50%" @click:outside="expertModeSwitch = false">
+        <v-card>
+          <v-card-title>HINWEIS</v-card-title>
+          <v-card-text>
+            Dieser Modus erweitert die Funktionalität und ermöglicht dir, dass du alles anpassen kannst.<br/>
+            Das UI wird dadurch deutlich erweitert und kann unübersichtlicher wirken.
+            <br/>
+            <v-checkbox v-model="expertModeDialogAlreadyAccepted" hide-details label="Entscheidung merken"/>
+          </v-card-text>
+          <v-card-actions>
+            <v-btn color="error" @click="expertModeSwitch = false; expertModeDialog = false; expertModeDialogAlreadyAccepted = false;">
+              Hilfe! Bitte zurück
+            </v-btn>
+            <v-btn color="primary" @click="expertModeDialog = false; expertMode = true; saveCookie()">
+              Auf geht's!
+            </v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
+      <v-dialog v-model="customVehicleDialog" width="50%" @click:outside="customVehicleDialog = false">
+        <v-card>
+          <v-card-title>Neues Fahrzeug erstellen</v-card-title>
+          <v-card-text>
+            <v-row>
+              <v-col>
+                <v-text-field v-model="tempVehicle.name" outlined dense hide-details label="Name des neuen Autos"/>
+              </v-col>
+            </v-row>
+            <v-row>
+              <v-col>
+                <v-text-field v-model.number="tempVehicle.capacity" type="number" outlined dense hide-details label="Kofferraumgröße" min="0"/>
+              </v-col>
+            </v-row>
+            <v-row>
+              <v-col>
+                <v-text-field v-model.number="tempVehicle.speed" type="number" outlined dense hide-details label="Durchschnitsgeschwindigkeit" min="0"/>
+              </v-col>
+            </v-row>
+          </v-card-text>
+          <v-card-actions>
+            <v-btn color="error" @click="customVehicleDialog = false; resetTempVehicle()">
+              Abbrechen
+            </v-btn>
+            <v-btn color="primary" @click="addCustomVehicle()">
+              Speichern
+            </v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
+      <v-dialog v-model="vehicleDeleteDialog" width="50%" @click:outside="vehicleDeleteDialog = false">
+        <v-card>
+          <v-card-title>Achtung</v-card-title>
+          <v-card-text>
+            Bist du dir sicher, dass du das ausgewählte Fahrzeug löschen willst?
+          </v-card-text>
+          <v-card-actions>
+            <v-btn color="error" @click="vehicleDeleteDialog = false">
+              Abbrechen
+            </v-btn>
+            <v-btn color="primary" @click="deleteVehicle(); vehicleDeleteDialog = false">
+              Ja, löschen
+            </v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
+      <v-dialog v-model="resetDialog" width="50%" @click:outside="resetDialog = false;">
+        <v-card>
+          <v-card-title>Achtung</v-card-title>
+          <v-card-text>
+            Bitte wähle aus, was du zurücksetzen möchtest:
+            <v-row no-gutters>
+              <v-col>
+                <v-checkbox hide-details v-model="resetCars" class="ma-0" label="Fahrzeuge"/>
+                <v-checkbox hide-details v-model="resetJobs" class="ma-0" label="Jobs"/>
+                <v-checkbox hide-details v-model="resetSettings" class="ma-0" label="Einstellungen"/>
+              </v-col>
+            </v-row>
+          </v-card-text>
+          <v-card-actions>
+            <v-btn class="error" @click="resetDialog = false;">
+              Abbrechen
+            </v-btn>
+            <v-btn class="primary" @click="resetFunction()">
+              Ok. Lösch das Zeug
+            </v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
+      <v-card class="mb-4 mt-3" elevation="6">
         <v-card-title>Einstellungsmöglichkeiten</v-card-title>
         <v-card-text>
         <v-row no-gutters>
@@ -10,7 +106,7 @@
                 <v-tooltip bottom>
                   <template v-slot:activator="{ on, attrs }">
                     <v-icon v-on="on" v-bind="attrs" :color="useVehicleSpeed ? 'green' : 'grey'"
-                            @click="useVehicleSpeed ? useVehicleSpeed = false : useVehicleSpeed = true"
+                            @click="useVehicleSpeed ? useVehicleSpeed = false : useVehicleSpeed = true; saveCookie();"
                             size="30">mdi-truck-fast</v-icon>
                   </template>
                   <span><u>Fahrzeuggeschwindigkeit</u> wird {{useVehicleSpeed ? '' : 'nicht'}} mit einberechnet</span>
@@ -18,7 +114,7 @@
                 <v-tooltip bottom>
                   <template v-slot:activator="{ on, attrs }">
                     <v-icon v-on="on" v-bind="attrs" :color="useRunWays ? 'green' : 'grey'"
-                            @click="useRunWays ? useRunWays = false : useRunWays = true"
+                            @click="useRunWays ? useRunWays = false : useRunWays = true; saveCookie();"
                             size="30">mdi-run-fast</v-icon>
                   </template>
                   <span><u>Laufwege</u> werden {{useRunWays ? '' : 'nicht'}} mit einberechnet</span>
@@ -26,7 +122,7 @@
                 <v-tooltip bottom>
                   <template v-slot:activator="{ on, attrs }">
                     <v-icon v-on="on" v-bind="attrs" :color="useUmpacken ? 'green' : 'grey'"
-                            @click="useUmpacken ? useUmpacken = false : useUmpacken = true"
+                            @click="useUmpacken ? useUmpacken = false : useUmpacken = true; saveCookie();"
                             size="30">mdi-package-variant</v-icon>
                   </template>
                   <span>Zeit für's <u>Umpacken</u> wird {{useUmpacken ? '' : 'nicht'}} mit einberechnet</span>
@@ -34,7 +130,7 @@
                 <v-tooltip bottom>
                   <template v-slot:activator="{ on, attrs }">
                     <v-icon v-on="on" v-bind="attrs" :color="useSchleifenfahrt ? 'green' : 'grey'"
-                            @click="useSchleifenfahrt ? useSchleifenfahrt = false : useSchleifenfahrt = true"
+                            @click="useSchleifenfahrt ? useSchleifenfahrt = false : useSchleifenfahrt = true; saveCookie();"
                             size="30">mdi-sync</v-icon>
                   </template>
                   <span><u>Schleifenfahrt</u> wird mit {{useSchleifenfahrt ? '' : 'nicht'}} einberechnet. <u>Schleifenfahrt</u> ist der Weg vom Verkauf zurück zur 1. Station</span>
@@ -45,24 +141,25 @@
         <v-row>
           <v-col>
             Anzahl der Personen:
-            <v-text-field v-model.number="playerAmount" outlined dense type="number" min="1" hide-details @click="updateAvailableCapacity()"/>
+            <v-text-field v-model.number="playerAmount" outlined dense type="number" min="1" hide-details @click="updateAvailableCapacity(); saveCookie();" @change="saveCookie(); updateAvailableCapacity();"/>
           </v-col>
           <v-col>
             Hosentasche:
             <v-text-field v-model.number="currentTrousersCapacity" outlined dense type="number" min="0"
-                          hide-details class="pa-0 ma-0"/>
-            <v-checkbox hide-details v-model="useTrousers" class="ma-0" :label=" useTrousers ? 'Verwendet' : 'Nicht verwendet'" @change="updateAvailableCapacity()"/>
+                          hide-details class="pa-0 ma-0" @change="saveCookie();"/>
+            <v-checkbox hide-details v-model="useTrousers" class="ma-0" :label=" useTrousers ? 'Verwendet' : 'Nicht verwendet'" @change="updateAvailableCapacity(); saveCookie();"/>
           </v-col>
           <v-col>
             Große Tasche:
-            <v-text-field v-model.number="currentBigBagCapacity" outlined dense type="number" min="0" hide-details/>
-            <v-checkbox hide-details v-model="useBigBag" class="ma-0" :label=" useBigBag ? 'Verwendet' : 'Nicht verwendet'" @change="updateAvailableCapacity()"/>
+            <v-text-field v-model.number="currentBigBagCapacity" outlined dense type="number" min="0" hide-details @change="saveCookie();"/>
+            <v-checkbox hide-details v-model="useBigBag" class="ma-0" :label=" useBigBag ? 'Verwendet' : 'Nicht verwendet'" @change="updateAvailableCapacity(); saveCookie();"/>
           </v-col>
         </v-row>
-          <h2>Verfügbare Kapazität: <b>{{currentCapacity | fancyUnits}}</b><br/></h2>
+          <h2>Verfügbare Kapazität: <b>{{getFullCapacity() | fancyUnits}}</b><br/></h2>
         <v-row no-gutters>
-            <v-col>
-                Verfügbare Fahrzeuge:
+            <v-col v-if="expertMode === false">
+              <br/>
+              <span>Verfügbare Fahrzeuge:</span>
               <v-autocomplete :value="currentlySelectedCars" outlined :items="allCars" item-text="name"
                               multiple item-value="id" chips deletable-chips return-object
                               @change="vehicleProgress()">
@@ -82,21 +179,43 @@
                 </template>
               </v-autocomplete>
             </v-col>
-            <v-expansion-panels accordion v-if="expertMode">
-              <v-expansion-panel v-for="car in currentlySelectedCars" :key="car.name">
-                <v-expansion-panel-header>{{car.name}} -- Kapazität: {{car.capacity * car.amount | fancyUnits()}} -- Anzahl: {{car.amount}}</v-expansion-panel-header>
-                <v-expansion-panel-content>
-                  <v-row>
-                    <v-col>
-                    Kapazität:
-                    <v-text-field v-model.number="car.capacity" outlined dense type="number" min="0"/>
-                    Geschwindigkeit:
-                    <v-text-field v-model.number="car.speed" outlined dense type="number" min="0"/>
-                    </v-col>
-                  </v-row>
-                </v-expansion-panel-content>
-              </v-expansion-panel>
-            </v-expansion-panels>
+            <v-col v-if="expertMode">
+              <br/>
+              <span>Verfügbare Fahrzeuge:
+                <v-tooltip top>
+                  <template v-slot:activator="{ on, attrs }">
+                    <v-icon v-on="on" v-bind="attrs" @click="customVehicleDialog = true">mdi-plus-circle</v-icon>
+                  </template>
+                  <span>Neues Fahrzeug erstellen</span>
+                </v-tooltip>
+              </span>
+              <v-expansion-panels accordion>
+                <v-expansion-panel v-for="car in allCars" :key="car.name">
+                  <v-expansion-panel-header>{{car.name}} -- Kapazität: {{car.capacity * car.amount | fancyUnits()}} -- Anzahl: {{car.amount}}</v-expansion-panel-header>
+                  <v-expansion-panel-content>
+                    <v-row>
+                      <v-col>
+                        Kapazität:
+                        <v-text-field v-model.number="car.capacity" outlined dense type="number" min="0" @change="updateAvailableCapacity()"/>
+                        Durchschnitsgeschwindigkeit:
+                        <v-text-field v-model.number="car.speed" outlined dense type="number" min="0"/>
+                        Anzahl:
+                        <v-text-field v-model.number="car.amount" outlined dense type="number" min="0" @change="updateCurrentlySelectedVehicles(car, 3)"/>
+                        Aktiv:
+                        <v-checkbox v-model="car.active" hide-details class="ma-0" :label="car.active ? 'Wird verwendet' : 'Wird nicht verwendet'"/>
+                      </v-col>
+                    </v-row>
+                    <v-row>
+                      <v-col>
+                        <v-btn color="error" @click="tempVehicle = car; vehicleDeleteDialog = true">
+                          Löschen
+                        </v-btn>
+                      </v-col>
+                    </v-row>
+                  </v-expansion-panel-content>
+                </v-expansion-panel>
+              </v-expansion-panels>
+            </v-col>
         </v-row>
         </v-card-text>
       </v-card>
@@ -209,11 +328,16 @@ import kmToMiles from "@/utils/kmToMiles";
 import roundMultiple from "@/utils/roundMultiple";
 import IJobStepCalculation from "@/types/IJobStepCalculation";
 import IJobCalculation from "@/types/IJobCalculation";
+import ISaveFile from "@/types/ISaveFile";
 
 @Component
 export default class Configurator extends Vue{
     /* Variables */
-    expertMode = false;
+    expertMode = true;
+    expertModeSwitch = false;
+    expertModeDialog = false;
+    expertModeDialogAlreadyAccepted = false;
+    vehicleDeleteDialog = false;
 
     /* Inventory*/
     currentTrousersCapacity = 1000;
@@ -221,10 +345,25 @@ export default class Configurator extends Vue{
     currentBigBagCapacity = 5000;
     useBigBag = true;
 
-    /*Available Cars*/
+    /*Cars things*/
     useVehicleSpeed = true;
     currentlySelectedCars: IVehicle[] = [];
     allCars: IVehicle[] = cars;
+    customVehicleDialog = false;
+    tempVehicle: IVehicle = {
+      id: 99,
+      name: "",
+      speed: 0,
+      capacity: 0,
+      amount: 0,
+      active: true
+    };
+
+    /*Reset Stuff*/
+    resetDialog = false;
+    resetSettings = false;
+    resetCars = false;
+    resetJobs = false;
 
     /*Jobs*/
     allJobs: IJob[] = jobs;
@@ -236,9 +375,46 @@ export default class Configurator extends Vue{
     useUmpacken = true;
     useSchleifenfahrt = true;
 
+
     async created(){
+        //load the cookie or create if not available
+        if(!localStorage.settings){
+          this.saveCookie();
+        }
+        else{
+          this.loadCookie();
+        }
+
+
         //Update the initial capacity
         this.updateAvailableCapacity();
+
+        //Check for expert Mode
+        if(this.expertMode){
+          this.expertModeSwitch = true;
+        }
+
+    }
+
+    /***
+     * Behaviour for the expert Mode Dialog
+     */
+    expertModeFunction(){
+      if(this.expertModeSwitch){
+        //check if the user doesnt want to see the dialog again
+        if(this.expertModeDialogAlreadyAccepted){
+          this.expertMode = true;
+          this.saveCookie();
+        }
+        else{
+          this.expertModeDialog = true;
+        }
+      }
+      else{
+        this.expertModeDialog = false;
+        this.expertMode = false;
+        this.saveCookie();
+      }
     }
 
     /***
@@ -246,13 +422,13 @@ export default class Configurator extends Vue{
      */
     vehicleProgress(){
         this.updateAvailableCapacity();
-        this.checkForCustomVehicleCreation();
+        this.customVehicleCreation();
     }
 
     /***
      * Method for creating the custom Vehicles.
      */
-    checkForCustomVehicleCreation(){
+    customVehicleCreation(){
         //TODO: Implement custom Vehicle Creating
     }
 
@@ -388,8 +564,8 @@ export default class Configurator extends Vue{
      */
     getFullCapacity(): number {
       //Sum up the complete Capacity
-      let fullCapacity = (this.useTrousers ? this.currentTrousersCapacity : 0)
-          + (this.useBigBag ? this.currentBigBagCapacity : 0);
+      let fullCapacity = (this.useTrousers ? this.currentTrousersCapacity * this.playerAmount : 0)
+          + (this.useBigBag ? this.currentBigBagCapacity * this.playerAmount : 0);
       this.currentlySelectedCars.forEach((vehicle) => {
         fullCapacity = fullCapacity + (vehicle.capacity * vehicle.amount);
       });
@@ -425,7 +601,7 @@ export default class Configurator extends Vue{
   /***
    * Updates the array of currently selected cars
    * @param currentVehicle the vehicle
-   * @param mathType 1: add; 2: substract
+   * @param mathType 1: add; 2: substract; 3: just take the vehicle amount
    */
     updateCurrentlySelectedVehicles(currentVehicle: IVehicle, mathType: number){
       const vehicle = this.currentlySelectedCars.find(vehicle => vehicle.id === currentVehicle.id);
@@ -434,6 +610,7 @@ export default class Configurator extends Vue{
           case 1:
             vehicle.amount++;
             this.updateAvailableCapacity();
+            this.saveCookie();
             break;
           case 2:
             //check if vehicle needs to be deleted from the array
@@ -445,6 +622,17 @@ export default class Configurator extends Vue{
               Vue.delete(this.currentlySelectedCars, this.currentlySelectedCars.findIndex(vehicle => vehicle.id === currentVehicle.id))
             }
             this.updateAvailableCapacity();
+            this.saveCookie();
+            break;
+          case 3:
+            //check if vehicle amount has been increased
+            vehicle.amount = currentVehicle.amount;
+            //check if decreased
+            if(currentVehicle.amount === 0){
+              Vue.delete(this.currentlySelectedCars, this.currentlySelectedCars.findIndex(vehicle => vehicle.id === currentVehicle.id));
+            }
+            this.updateAvailableCapacity();
+            this.saveCookie();
             break;
           default:
             break;
@@ -454,8 +642,156 @@ export default class Configurator extends Vue{
         this.currentlySelectedCars.push(currentVehicle);
         currentVehicle.amount++;
         this.updateAvailableCapacity();
+        this.saveCookie();
       }
     }
+
+    //
+    // Custom Vehicle Creation
+    //
+
+    /***
+     * Resets the values of the tempVehicle
+     */
+    resetTempVehicle(){
+      this.tempVehicle = {
+        id: 99,
+        name: '',
+        speed: 0,
+        capacity: 0,
+        amount: 0,
+        active: true
+      };
+    }
+
+    /***
+     * Adds the custom created vehicle to the vehicle array
+     */
+    addCustomVehicle(){
+      //give the new vehicle an unique id
+      if(this.tempVehicle.name === ''){
+        return;
+      }
+      const startID = 100;
+      this.tempVehicle.id = startID + this.allCars.length + this.tempVehicle.name.length;
+      this.allCars.push(this.tempVehicle);
+      this.customVehicleDialog = false;
+      this.resetTempVehicle();
+      this.saveCookie();
+    }
+
+    /***
+     * Deletes a vehicle from the array
+     */
+    deleteVehicle(){
+      const vehicleToDelete = this.allCars.find(vehicle => vehicle.id === this.tempVehicle.id);
+      if(vehicleToDelete !== undefined){
+        //check if vehicle is currently selected if so, remove also from this list
+        const vehicleToDeleteInCurrentlySelected = this.currentlySelectedCars.find(vehicle => vehicle.id === this.tempVehicle.id);
+        if(vehicleToDeleteInCurrentlySelected !== undefined){
+          Vue.delete(this.currentlySelectedCars, this.currentlySelectedCars.findIndex(vehicle => vehicle.id === this.tempVehicle.id));
+        }
+        //Delete the vehicle from the allcars array
+        Vue.delete(this.allCars, this.allCars.findIndex(vehicle => vehicle.id === this.tempVehicle.id));
+      }
+      this.resetTempVehicle();
+      this.updateAvailableCapacity();
+      this.saveCookie();
+    }
+
+    //
+    //Cookie Area
+    //
+
+    /***
+     * Updates the cookie value with the current states
+     * In fact, you just got pranked! It's local storage not a cookie
+     */
+    saveCookie(){
+      //check if the cookie exists
+      if(localStorage.settings){
+        localStorage.settings = JSON.stringify(this.generateNewSaveFile());
+      }
+    }
+
+    /***
+     * Loads the settings from the cookie
+     * In fact, you just got pranked! It's local storage not a cookie
+     */
+    loadCookie(){
+      const cookie = JSON.parse(localStorage.settings);
+      //load the settings
+      this.allCars = cookie.vehicles;
+      this.allJobs = cookie.jobs;
+      this.currentlySelectedCars = cookie.currentlySelectedCars;
+      this.expertMode = cookie.settings.expertMode;
+      this.expertModeDialogAlreadyAccepted = cookie.settings.expertModeDialogAlreadyAccepted;
+      this.currentTrousersCapacity = cookie.settings.currentTrousersCapacity;
+      this.useTrousers = cookie.settings.useTrousers;
+      this.currentBigBagCapacity = cookie.settings.currentBigBagCapacity;
+      this.useBigBag = cookie.settings.useBigBag;
+      this.useVehicleSpeed = cookie.settings.useVehicleSpeed;
+      this.playerAmount = cookie.settings.playerAmount;
+      this.currentCapacity = cookie.settings.currentCapacity;
+      this.useRunWays = cookie.settings.useRunWays;
+      this.useUmpacken = cookie.settings.useUmpacken;
+      this.useSchleifenfahrt = cookie.settings.useSchleifenfahrt;
+    }
+
+    /***
+     * Returns the full save-file
+     */
+    generateNewSaveFile(): ISaveFile{
+      return {
+        vehicles: this.allCars,
+        jobs: this.allJobs,
+        currentlySelectedCars: this.currentlySelectedCars,
+        settings: {
+          expertMode: this.expertMode,
+          expertModeDialogAlreadyAccepted: this.expertModeDialogAlreadyAccepted,
+          currentTrousersCapacity: this.currentTrousersCapacity,
+          useTrousers: this.useTrousers,
+          currentBigBagCapacity: this.currentBigBagCapacity,
+          useBigBag: this.useBigBag,
+          useVehicleSpeed: this.useVehicleSpeed,
+          playerAmount: this.playerAmount,
+          currentCapacity: this.currentCapacity,
+          useRunWays: this.useRunWays,
+          useUmpacken: this.useUmpacken,
+          useSchleifenfahrt: this.useSchleifenfahrt
+        },
+        version: 1
+      };
+    }
+
+  //
+  // Reset Stuff
+  //
+
+  /***
+   * Resets all selected things
+   */
+  resetFunction(){
+    //check if vehicles have to be reset
+    if(this.resetCars){
+      this.allCars = cars;
+      this.currentlySelectedCars = [];
+    }
+    //check if jobs have to be reset
+    if(this.resetJobs){
+      this.allJobs = jobs;
+    }
+    //check if settings have to be reset
+    if(this.resetSettings){
+      this.expertMode = false;
+      this.expertModeSwitch = false;
+      this.expertModeDialogAlreadyAccepted = false;
+    }
+    //update some stuff
+    this.updateAvailableCapacity();
+    this.saveCookie();
+    this.resetDialog = false;
+  }
 
 }
 </script>

@@ -56,14 +56,6 @@ const cars: IVehicle[] = [
         capacity: 105000,
         amount: 0,
         active: true
-    },
-    {
-        id: 99,
-        name: "Eigenes erstellen",
-        speed: 0,
-        capacity: 0,
-        amount: 0,
-        active: true
     }
 ]
 
