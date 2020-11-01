@@ -160,7 +160,7 @@
             <v-col v-if="expertMode === false">
               <br/>
               <span>Verfügbare Fahrzeuge:</span>
-              <v-autocomplete :value="currentlySelectedCars" outlined :items="allCars" item-text="name"
+              <v-autocomplete :value="allCars.filter(car => car.selected === true)" outlined :items="allCars" item-text="name"
                               multiple item-value="id" chips deletable-chips return-object
                               @change="vehicleProgress()">
                 <template v-slot:item="{ item }" >
@@ -333,7 +333,7 @@ import ISaveFile from "@/types/ISaveFile";
 @Component
 export default class Configurator extends Vue{
     /* Variables */
-    expertMode = true;
+    expertMode = false;
     expertModeSwitch = false;
     expertModeDialog = false;
     expertModeDialogAlreadyAccepted = false;
@@ -347,7 +347,6 @@ export default class Configurator extends Vue{
 
     /*Cars things*/
     useVehicleSpeed = true;
-    currentlySelectedCars: IVehicle[] = [];
     allCars: IVehicle[] = cars;
     customVehicleDialog = false;
     tempVehicle: IVehicle = {
@@ -356,7 +355,8 @@ export default class Configurator extends Vue{
       speed: 0,
       capacity: 0,
       amount: 0,
-      active: true
+      active: true,
+      selected: false
     };
 
     /*Reset Stuff*/
@@ -384,7 +384,6 @@ export default class Configurator extends Vue{
         else{
           this.loadCookie();
         }
-
 
         //Update the initial capacity
         this.updateAvailableCapacity();
@@ -422,14 +421,6 @@ export default class Configurator extends Vue{
      */
     vehicleProgress(){
         this.updateAvailableCapacity();
-        this.customVehicleCreation();
-    }
-
-    /***
-     * Method for creating the custom Vehicles.
-     */
-    customVehicleCreation(){
-        //TODO: Implement custom Vehicle Creating
     }
 
     /***
@@ -457,8 +448,7 @@ export default class Configurator extends Vue{
       if(this.useSchleifenfahrt){
         //Fahrzeiten einberechnen
         if(this.useVehicleSpeed){
-          //check if there is any car available
-          if(this.currentlySelectedCars.length > 0){
+          if(this.allCars.filter(car => car.selected).length > 0){
             totalJobTime = totalJobTime + (kmToMiles(job.loopDistanceKm) / this.getAverageSpeed() * 60 * 60);
           }
         }
@@ -566,8 +556,10 @@ export default class Configurator extends Vue{
       //Sum up the complete Capacity
       let fullCapacity = (this.useTrousers ? this.currentTrousersCapacity * this.playerAmount : 0)
           + (this.useBigBag ? this.currentBigBagCapacity * this.playerAmount : 0);
-      this.currentlySelectedCars.forEach((vehicle) => {
-        fullCapacity = fullCapacity + (vehicle.capacity * vehicle.amount);
+      this.allCars.forEach((vehicle) => {
+        if(vehicle.selected){
+          fullCapacity = fullCapacity + (vehicle.capacity * vehicle.amount);
+        }
       });
       return fullCapacity;
     }
@@ -577,12 +569,12 @@ export default class Configurator extends Vue{
      */
     updateAvailableCapacity(){
         let fullCapacity = (this.useTrousers ? this.currentTrousersCapacity * this.playerAmount : 0)
-            + (this.useBigBag ? this.currentBigBagCapacity : 0);
-        this.currentlySelectedCars.forEach((item) => {
-            if(item.active){
-                fullCapacity = fullCapacity + (item.capacity * item.amount);
-            }
-        });
+            + (this.useBigBag ? this.currentBigBagCapacity * this.playerAmount : 0);
+        this.allCars.forEach((car) => {
+          if(car.selected && car.active){
+            fullCapacity = fullCapacity + (car.capacity * car.amount);
+          }
+        })
         this.currentCapacity = fullCapacity;
     }
 
@@ -590,12 +582,21 @@ export default class Configurator extends Vue{
      * Returns the average Speed over all Vehicles selected
      */
     getAverageSpeed(){
-        //Full Speed
-        let fullSpeed = 0;
-        this.currentlySelectedCars.forEach((car) => {
-            fullSpeed = fullSpeed + car.speed;
-        });
-        return fullSpeed / this.currentlySelectedCars.length;
+      //Full Speed
+      let fullSpeed = 0;
+      this.allCars.forEach((car) => {
+        if(car.selected){
+          fullSpeed = fullSpeed + car.speed
+        }
+      });
+      let activeCarAmount = 0;
+      this.allCars.forEach((car) => {
+        if(car.selected){
+          activeCarAmount++;
+        }
+      })
+      console.log(activeCarAmount)
+      return fullSpeed / activeCarAmount;
     }
 
   /***
@@ -604,45 +605,33 @@ export default class Configurator extends Vue{
    * @param mathType 1: add; 2: substract; 3: just take the vehicle amount
    */
     updateCurrentlySelectedVehicles(currentVehicle: IVehicle, mathType: number){
-      const vehicle = this.currentlySelectedCars.find(vehicle => vehicle.id === currentVehicle.id);
-      if(vehicle !== undefined){
-        switch (mathType){
-          case 1:
-            vehicle.amount++;
-            this.updateAvailableCapacity();
-            this.saveCookie();
-            break;
-          case 2:
-            //check if vehicle needs to be deleted from the array
-            if((vehicle.amount - 1) > 0){
-              vehicle.amount--;
-            }
-            else{
-              vehicle.amount--;
-              Vue.delete(this.currentlySelectedCars, this.currentlySelectedCars.findIndex(vehicle => vehicle.id === currentVehicle.id))
-            }
-            this.updateAvailableCapacity();
-            this.saveCookie();
-            break;
-          case 3:
-            //check if vehicle amount has been increased
-            vehicle.amount = currentVehicle.amount;
-            //check if decreased
-            if(currentVehicle.amount === 0){
-              Vue.delete(this.currentlySelectedCars, this.currentlySelectedCars.findIndex(vehicle => vehicle.id === currentVehicle.id));
-            }
-            this.updateAvailableCapacity();
-            this.saveCookie();
-            break;
-          default:
-            break;
-        }
-      }
-      else {
-        this.currentlySelectedCars.push(currentVehicle);
-        currentVehicle.amount++;
-        this.updateAvailableCapacity();
-        this.saveCookie();
+      switch (mathType){
+        case 1:
+          currentVehicle.amount++;
+          currentVehicle.selected = true;
+          this.updateAvailableCapacity();
+          this.saveCookie();
+          break;
+        case 2:
+          //check if vehicle needs to be deleted from the array
+          if((currentVehicle.amount - 1) > 0){
+            currentVehicle.amount--;
+            currentVehicle.selected = true;
+          }
+          else{
+            currentVehicle.amount--;
+            currentVehicle.selected = false;
+          }
+          this.updateAvailableCapacity();
+          this.saveCookie();
+          break;
+        case 3:
+          currentVehicle.selected = true;
+          this.updateAvailableCapacity();
+          this.saveCookie();
+          break;
+        default:
+          break;
       }
     }
 
@@ -660,7 +649,8 @@ export default class Configurator extends Vue{
         speed: 0,
         capacity: 0,
         amount: 0,
-        active: true
+        active: true,
+        selected: false
       };
     }
 
@@ -686,11 +676,6 @@ export default class Configurator extends Vue{
     deleteVehicle(){
       const vehicleToDelete = this.allCars.find(vehicle => vehicle.id === this.tempVehicle.id);
       if(vehicleToDelete !== undefined){
-        //check if vehicle is currently selected if so, remove also from this list
-        const vehicleToDeleteInCurrentlySelected = this.currentlySelectedCars.find(vehicle => vehicle.id === this.tempVehicle.id);
-        if(vehicleToDeleteInCurrentlySelected !== undefined){
-          Vue.delete(this.currentlySelectedCars, this.currentlySelectedCars.findIndex(vehicle => vehicle.id === this.tempVehicle.id));
-        }
         //Delete the vehicle from the allcars array
         Vue.delete(this.allCars, this.allCars.findIndex(vehicle => vehicle.id === this.tempVehicle.id));
       }
@@ -723,7 +708,6 @@ export default class Configurator extends Vue{
       //load the settings
       this.allCars = cookie.vehicles;
       this.allJobs = cookie.jobs;
-      this.currentlySelectedCars = cookie.currentlySelectedCars;
       this.expertMode = cookie.settings.expertMode;
       this.expertModeDialogAlreadyAccepted = cookie.settings.expertModeDialogAlreadyAccepted;
       this.currentTrousersCapacity = cookie.settings.currentTrousersCapacity;
@@ -745,7 +729,6 @@ export default class Configurator extends Vue{
       return {
         vehicles: this.allCars,
         jobs: this.allJobs,
-        currentlySelectedCars: this.currentlySelectedCars,
         settings: {
           expertMode: this.expertMode,
           expertModeDialogAlreadyAccepted: this.expertModeDialogAlreadyAccepted,
@@ -775,7 +758,6 @@ export default class Configurator extends Vue{
     //check if vehicles have to be reset
     if(this.resetCars){
       this.allCars = cars;
-      this.currentlySelectedCars = [];
     }
     //check if jobs have to be reset
     if(this.resetJobs){

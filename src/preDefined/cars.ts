@@ -7,7 +7,8 @@ const cars: IVehicle[] = [
         speed: 65,
         capacity: 12000,
         amount: 0,
-        active: true
+        active: true,
+        selected: false
     },
     {
         id: 1,
@@ -15,7 +16,8 @@ const cars: IVehicle[] = [
         speed: 65,
         capacity: 15000,
         amount: 0,
-        active: true
+        active: true,
+        selected: false
     },
     {
         id: 2,
@@ -23,7 +25,8 @@ const cars: IVehicle[] = [
         speed: 65,
         capacity: 45000,
         amount: 0,
-        active: true
+        active: true,
+        selected: false
     },
     {
         id: 3,
@@ -31,7 +34,8 @@ const cars: IVehicle[] = [
         speed: 65,
         capacity: 60000,
         amount: 0,
-        active: true
+        active: true,
+        selected: false
     },
     {
         id: 4,
@@ -39,7 +43,8 @@ const cars: IVehicle[] = [
         speed: 65,
         capacity: 60000,
         amount: 0,
-        active: true
+        active: true,
+        selected: false
     },
     {
         id: 5,
@@ -47,7 +52,8 @@ const cars: IVehicle[] = [
         speed: 65,
         capacity: 75000,
         amount: 0,
-        active: true
+        active: true,
+        selected: false
     },
     {
         id: 6,
@@ -55,7 +61,8 @@ const cars: IVehicle[] = [
         speed: 65,
         capacity: 105000,
         amount: 0,
-        active: true
+        active: true,
+        selected: false
     }
 ]
 

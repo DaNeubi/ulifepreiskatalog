@@ -4,5 +4,6 @@ export default interface IVehicle{
     speed: number,
     capacity: number,
     amount: number,
-    active: boolean
+    active: boolean,
+    selected: boolean
 }
