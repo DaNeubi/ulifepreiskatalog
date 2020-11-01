@@ -190,8 +190,8 @@
                 </v-tooltip>
               </span>
               <v-expansion-panels accordion>
-                <v-expansion-panel v-for="car in allCars" :key="car.name">
-                  <v-expansion-panel-header>{{car.name}} -- Kapazität: {{car.capacity * car.amount | fancyUnits()}} -- Anzahl: {{car.amount}}</v-expansion-panel-header>
+                <v-expansion-panel v-for="car in allCars" :key="car.id">
+                  <v-expansion-panel-header>{{car.name}} {{car.capacity | fancyUnits}} -- Kapazität: {{car.capacity * car.amount | fancyUnits()}} -- Anzahl: {{car.amount}}</v-expansion-panel-header>
                   <v-expansion-panel-content>
                     <v-row>
                       <v-col>
@@ -314,6 +314,13 @@
                 </v-expansion-panel>
             </v-expansion-panels>
         </v-row>
+      <v-row>
+        <v-col>
+          <br/>
+          <b>Verbesserungsvorschläge gerne bei mir melden: 555-480-4612</b><br/>
+          <b>Spenden gerne an: LS82172757</b>
+        </v-col>
+      </v-row>
     </v-container>
 </template>
 

@@ -9,7 +9,8 @@ function fancyfyVariatyOne(baseUnit: number): string {
         return baseUnit.toString();
     }
     //Convert
-    return Math.floor(baseUnit / 1000) + 'k';
+    //return Math.floor(baseUnit / 1000) + 'k';
+    return parseFloat((baseUnit / 1000).toFixed(2)).toString() + "k";
 }
 
 
