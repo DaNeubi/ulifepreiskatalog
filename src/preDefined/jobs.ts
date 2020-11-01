@@ -334,7 +334,7 @@ const jobs: IJob[] = [
         rundistance: 5,
         umpackenTime: 6,
         loopDistanceKm: 4.5,
-        jobColor: ["#26A69A","#BCF0EB"]
+        jobColor: ["#F9FF0F","#FFFF9D"]
     },
     {
         id: 9,
@@ -365,7 +365,7 @@ const jobs: IJob[] = [
         id: 10,
         name: "Nüsse",
         stepsDescription: "Nussplantage -> Obsthändler",
-        toolRequired: "Gartenschaufel?",
+        toolRequired: "Gartenschaufel",
         stepsAmount: 1,
         pricePerResource: 5,
         steps: [
@@ -384,7 +384,7 @@ const jobs: IJob[] = [
         rundistance: 2,
         umpackenTime: 12,
         loopDistanceKm: 2.1,
-        jobColor: ["#63D297","#dcf5e7"]
+        jobColor: ["#7A5C2F","#C7AE89"]
     }
 ]
 
