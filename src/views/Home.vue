@@ -166,7 +166,7 @@
                 <template v-slot:item="{ item }" >
                   <v-list-item @click="updateCurrentlySelectedVehicles(item,1)" :disabled="item.amount > 0">
                     <v-list-item-content>
-                      {{ item.name }}
+                      {{ item.name }} - {{item.capacity | fancyUnits}}
                     </v-list-item-content>
                   </v-list-item>
                 </template>
@@ -174,7 +174,7 @@
                   <v-chip close
                           @click:close="updateCurrentlySelectedVehicles(item,2)"
                           :close-icon="item.amount > 1 ? 'mdi-minus-circle' : 'mdi-close-circle'"
-                  ><v-icon size="18" @click="updateCurrentlySelectedVehicles(item,1)" class="pr-1">mdi-plus-circle</v-icon> {{item.name}} ({{item.amount}})
+                  ><v-icon size="18" @click="updateCurrentlySelectedVehicles(item,1)" class="pr-1">mdi-plus-circle</v-icon> {{item.name}} {{item.capacity | fancyUnits}} ({{item.amount}})
                   </v-chip>
                 </template>
               </v-autocomplete>
@@ -594,8 +594,7 @@ export default class Configurator extends Vue{
         if(car.selected){
           activeCarAmount++;
         }
-      })
-      console.log(activeCarAmount)
+      });
       return fullSpeed / activeCarAmount;
     }
 
@@ -693,10 +692,8 @@ export default class Configurator extends Vue{
      * In fact, you just got pranked! It's local storage not a cookie
      */
     saveCookie(){
-      //check if the cookie exists
-      if(localStorage.settings){
-        localStorage.settings = JSON.stringify(this.generateNewSaveFile());
-      }
+      //Just override or create
+      localStorage.settings = JSON.stringify(this.generateNewSaveFile());
     }
 
     /***
