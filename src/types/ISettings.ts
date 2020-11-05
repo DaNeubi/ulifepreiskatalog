@@ -10,5 +10,7 @@ export default interface Settings{
     currentCapacity: number,
     useRunWays:boolean,
     useUmpacken: boolean,
-    useSchleifenfahrt: boolean
+    useSchleifenfahrt: boolean,
+    showGraph: boolean,
+    updateGraphOnEveryChange: boolean
 }

@@ -4,8 +4,10 @@ import './registerServiceWorker'
 import router from './router'
 import vuetify from './plugins/vuetify';
 import fancyUnits from "@/utils/fancyUnits";
+import echarts from 'vue-echarts';
 
 Vue.config.productionTip = false
+Vue.component('v-chart', echarts);
 
 new Vue({
   router,
