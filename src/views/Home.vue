@@ -3,7 +3,7 @@
       <v-toolbar dense>
         <v-toolbar-title>Modus:</v-toolbar-title>
         <v-switch v-model="expertModeSwitch" hide-details :label="expertMode ? 'Experten Modus' : 'Normaler Modus'"
-        class="pl-5 pr-5" @click="expertModeFunction()"/>
+                  class="pl-5 pr-5" @click="expertModeFunction()"/>
         <v-btn v-if="expertMode" color="error" @click="resetDialog = true;">
           Zurücksetzen
         </v-btn>
@@ -137,6 +137,19 @@
                 </v-tooltip>
               </v-col>
             </v-col>
+          <v-col>
+            <h3>Visualisierung:</h3>
+            <v-col class="pa-0">
+              <v-row>
+                <v-col class="pr-0">
+                  <v-checkbox v-model="showGraph" hide-details class="ma-0" :label="showGraph ? 'Graph wird angezeigt' : 'Graph wird nicht angezeigt'" @click="saveCookie();"/>
+                </v-col>
+                <v-col class="pl-0">
+                  <v-checkbox v-model="updateGraphOnEveryChange" hide-details class="ma-0" :label="updateGraphOnEveryChange ? 'Graph automatisch aktualisieren' : 'Graph nicht automatisch aktualisieren'" @click="saveCookie();"/>
+                </v-col>
+              </v-row>
+            </v-col>
+          </v-col>
         </v-row>
         <v-row>
           <v-col>
@@ -314,6 +327,15 @@
                 </v-expansion-panel>
             </v-expansion-panels>
         </v-row>
+      <v-row class="d-none d-sm-flex" v-if="showGraph">
+        <v-col>
+          <v-card>
+            <v-card-title>Visuelle Darstellung der Jobs</v-card-title>
+            <v-card-text><v-chart :options="updateChart()"/></v-card-text>
+          </v-card>
+
+        </v-col>
+      </v-row>
       <v-row>
         <v-col>
           <br/>
@@ -336,8 +358,15 @@ import roundMultiple from "@/utils/roundMultiple";
 import IJobStepCalculation from "@/types/IJobStepCalculation";
 import IJobCalculation from "@/types/IJobCalculation";
 import ISaveFile from "@/types/ISaveFile";
+import 'echarts/lib/chart/line';
+import 'echarts/lib/component/tooltip';
+import 'echarts/lib/component/legend';
+import createChartData from "@/methods/createChartData";
+import IChart from "@/types/chart/IChart";
 
-@Component
+@Component({
+
+})
 export default class Configurator extends Vue{
     /* Variables */
     expertMode = false;
@@ -345,6 +374,10 @@ export default class Configurator extends Vue{
     expertModeDialog = false;
     expertModeDialogAlreadyAccepted = false;
     vehicleDeleteDialog = false;
+
+    /*Chart things*/
+    updateGraphOnEveryChange = false;
+    showGraph = false;
 
     /* Inventory*/
     currentTrousersCapacity = 1000;
@@ -400,6 +433,33 @@ export default class Configurator extends Vue{
           this.expertModeSwitch = true;
         }
 
+    }
+
+    /***
+     * Updates the charts values and the chart itself
+     */
+    updateChart(){
+      //get the values
+      const currentChart: IChart = createChartData(this.calculateJobs(this.allJobs), 'h');
+      return {
+        title: {
+          text: currentChart.title
+        },
+        legend: {
+          data: currentChart.legend
+        },
+        grid: {
+          containLabel: true,
+          left: 0
+        },
+        tooltip: {
+          trigger: 'axis'
+        },
+        xAxis: currentChart.xAxisData,
+        yAxis: currentChart.yAxisData,
+        series: currentChart.chartSeries,
+        animationDuration: currentChart.animationDuration
+      }
     }
 
     /***
@@ -583,6 +643,9 @@ export default class Configurator extends Vue{
           }
         })
         this.currentCapacity = fullCapacity;
+        if(this.showGraph && this.updateGraphOnEveryChange){
+          this.updateChart();
+        }
     }
 
     /***
@@ -724,6 +787,8 @@ export default class Configurator extends Vue{
       this.useRunWays = cookie.settings.useRunWays;
       this.useUmpacken = cookie.settings.useUmpacken;
       this.useSchleifenfahrt = cookie.settings.useSchleifenfahrt;
+      this.showGraph = cookie.settings.showGraph;
+      this.updateGraphOnEveryChange = cookie.settings.updateGraphOnEveryChange;
     }
 
     /***
@@ -745,9 +810,11 @@ export default class Configurator extends Vue{
           currentCapacity: this.currentCapacity,
           useRunWays: this.useRunWays,
           useUmpacken: this.useUmpacken,
-          useSchleifenfahrt: this.useSchleifenfahrt
+          useSchleifenfahrt: this.useSchleifenfahrt,
+          showGraph: this.showGraph,
+          updateGraphOnEveryChange: this.updateGraphOnEveryChange
         },
-        version: 1
+        version: 2
       };
     }
 
