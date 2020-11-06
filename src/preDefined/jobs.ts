@@ -18,7 +18,9 @@ const jobs: IJob[] = [
                 umpackenAvail: false,
                 distanceKm: 3.68,
                 rundistance: 3,
-                umpackenTime: 1
+                umpackenTime: 1,
+                fruitSeller: false,
+                fruitSellerDistances: []
             },
             {
                 sourceName: "Steinpulver",
@@ -29,7 +31,9 @@ const jobs: IJob[] = [
                 umpackenAvail: false,
                 distanceKm: 6.33,
                 rundistance: 3,
-                umpackenTime: 1
+                umpackenTime: 1,
+                fruitSeller: false,
+                fruitSellerDistances: []
             },
             {
                 sourceName: "Beton",
@@ -40,7 +44,9 @@ const jobs: IJob[] = [
                 umpackenAvail: true,
                 distanceKm: 1.55,
                 rundistance: 7,
-                umpackenTime: 18
+                umpackenTime: 18,
+                fruitSeller: false,
+                fruitSellerDistances: []
             }
         ],
         rundistance: 5,
@@ -65,7 +71,9 @@ const jobs: IJob[] = [
                 umpackenAvail: false,
                 distanceKm: 3.68,
                 rundistance: 3,
-                umpackenTime: 1
+                umpackenTime: 1,
+                fruitSeller: false,
+                fruitSellerDistances: []
             },
             {
                 sourceName: "Raffiniertes Öl",
@@ -76,7 +84,9 @@ const jobs: IJob[] = [
                 umpackenAvail: true,
                 distanceKm: 6.3,
                 rundistance: 10,
-                umpackenTime: 18
+                umpackenTime: 18,
+                fruitSeller: false,
+                fruitSellerDistances: []
             },
             {
                 sourceName: "Benzin",
@@ -87,7 +97,9 @@ const jobs: IJob[] = [
                 umpackenAvail: true,
                 distanceKm: 2.5,
                 rundistance: 10,
-                umpackenTime: 18
+                umpackenTime: 18,
+                fruitSeller: false,
+                fruitSellerDistances: []
             }
         ],
         rundistance: 5,
@@ -112,7 +124,9 @@ const jobs: IJob[] = [
                 umpackenAvail: true,
                 distanceKm: 6.25,
                 rundistance: 10,
-                umpackenTime: 12
+                umpackenTime: 12,
+                fruitSeller: false,
+                fruitSellerDistances: []
             },
             {
                 sourceName: "Goldnugget",
@@ -123,7 +137,9 @@ const jobs: IJob[] = [
                 umpackenAvail: true,
                 distanceKm: 3.12,
                 rundistance: 65,
-                umpackenTime: 18
+                umpackenTime: 18,
+                fruitSeller: false,
+                fruitSellerDistances: []
             }
         ],
         rundistance: 25,
@@ -148,7 +164,9 @@ const jobs: IJob[] = [
                 umpackenAvail: false,
                 distanceKm: 0.4,
                 rundistance: 3,
-                umpackenTime: 1
+                umpackenTime: 1,
+                fruitSeller: false,
+                fruitSellerDistances: []
             },
             {
                 sourceName: "Mehl",
@@ -159,7 +177,9 @@ const jobs: IJob[] = [
                 umpackenAvail: true,
                 distanceKm: 6.88,
                 rundistance: 5,
-                umpackenTime: 18
+                umpackenTime: 18,
+                fruitSeller: false,
+                fruitSellerDistances: []
             }
         ],
         rundistance: 12,
@@ -184,7 +204,22 @@ const jobs: IJob[] = [
                 umpackenAvail: true,
                 distanceKm: 3,
                 rundistance: 3,
-                umpackenTime: 6
+                umpackenTime: 6,
+                fruitSeller: true,
+                fruitSellerDistances: [
+                    {
+                        number: 1,
+                        distanceKm: 2.55
+                    },
+                    {
+                        number: 2,
+                        distanceKm: 3.37
+                    },
+                    {
+                        number: 3,
+                        distanceKm: 5.49
+                    }
+                ]
             }
         ],
         rundistance: 2,
@@ -209,7 +244,9 @@ const jobs: IJob[] = [
                 umpackenAvail: false,
                 distanceKm: 5.44,
                 rundistance: 4,
-                umpackenTime: 1
+                umpackenTime: 1,
+                fruitSeller: false,
+                fruitSellerDistances: []
             },
             {
                 sourceName: "Gegorenes Fruchtiges",
@@ -220,7 +257,9 @@ const jobs: IJob[] = [
                 umpackenAvail: true,
                 distanceKm: 3.73,
                 rundistance: 15,
-                umpackenTime: 18
+                umpackenTime: 18,
+                fruitSeller: false,
+                fruitSellerDistances: []
             },
             {
                 sourceName: "Wein",
@@ -231,7 +270,9 @@ const jobs: IJob[] = [
                 umpackenAvail: true,
                 distanceKm: 3.44,
                 rundistance: 10,
-                umpackenTime: 18
+                umpackenTime: 18,
+                fruitSeller: false,
+                fruitSellerDistances: []
             }
         ],
         rundistance: 10,
@@ -256,7 +297,9 @@ const jobs: IJob[] = [
                 umpackenAvail: false,
                 distanceKm: 6.8,
                 rundistance: 4,
-                umpackenTime: 1
+                umpackenTime: 1,
+                fruitSeller: false,
+                fruitSellerDistances: []
             },
             {
                 sourceName: "Brett",
@@ -267,7 +310,9 @@ const jobs: IJob[] = [
                 umpackenAvail: true,
                 distanceKm: 10.5,
                 rundistance: 6,
-                umpackenTime: 12
+                umpackenTime: 12,
+                fruitSeller: false,
+                fruitSellerDistances: []
             }
         ],
         rundistance: 2,
@@ -292,7 +337,9 @@ const jobs: IJob[] = [
                 umpackenAvail: true,
                 distanceKm: 5.3,
                 rundistance: 60,
-                umpackenTime: 6
+                umpackenTime: 6,
+                fruitSeller: false,
+                fruitSellerDistances: []
             },
             {
                 sourceName: "Eisenbarren",
@@ -303,7 +350,9 @@ const jobs: IJob[] = [
                 umpackenAvail: true,
                 distanceKm: 2.26,
                 rundistance: 60,
-                umpackenTime: 18
+                umpackenTime: 18,
+                fruitSeller: false,
+                fruitSellerDistances: []
             }
         ],
         rundistance: 5,
@@ -328,7 +377,9 @@ const jobs: IJob[] = [
                 umpackenAvail: false,
                 distanceKm: 4.5,
                 rundistance: 3,
-                umpackenTime: 1
+                umpackenTime: 1,
+                fruitSeller: false,
+                fruitSellerDistances: []
             }
         ],
         rundistance: 5,
@@ -353,7 +404,22 @@ const jobs: IJob[] = [
                 umpackenAvail: true,
                 distanceKm: 3.05,
                 rundistance: 3,
-                umpackenTime: 6
+                umpackenTime: 6,
+                fruitSeller: true,
+                fruitSellerDistances: [
+                    {
+                        number: 1,
+                        distanceKm: 3.04
+                    },
+                    {
+                        number: 2,
+                        distanceKm: 3.58
+                    },
+                    {
+                        number: 3,
+                        distanceKm: 5.71
+                    }
+                ]
             }
         ],
         rundistance: 2,
@@ -378,7 +444,22 @@ const jobs: IJob[] = [
                 umpackenAvail: false,
                 distanceKm: 2.1,
                 rundistance: 3,
-                umpackenTime: 1
+                umpackenTime: 1,
+                fruitSeller: true,
+                fruitSellerDistances: [
+                    {
+                        number: 1,
+                        distanceKm: 2.10
+                    },
+                    {
+                        number: 2,
+                        distanceKm: 2.90
+                    },
+                    {
+                        number: 3,
+                        distanceKm: 5.74
+                    }
+                ]
             }
         ],
         rundistance: 2,
@@ -414,5 +495,7 @@ export default jobs;
         umpackenAvail: false,
         distanceKm: 0,
         rundistance: 0,
-        umpackenTime: 1
+        umpackenTime: 1,
+        fruitSeller: false,
+        fruitSellerDistances: []
  */

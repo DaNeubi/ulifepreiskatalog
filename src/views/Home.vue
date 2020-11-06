@@ -168,6 +168,25 @@
             <v-checkbox hide-details v-model="useBigBag" class="ma-0" :label=" useBigBag ? 'Verwendet' : 'Nicht verwendet'" @change="updateAvailableCapacity(); saveCookie();"/>
           </v-col>
         </v-row>
+        <v-row v-if="expertMode">
+          <v-col>
+            <h2>Obsthändler-Standort:</h2>
+            <v-autocomplete v-model="currentFruitSeller" :items="fruitSellers" item-text="name"
+                            hide-details outlined solo clearable return-object item-value="number"
+                            @change="saveCookie();">
+              <template v-slot:item="{ item }">
+                <v-list-item-content>
+                  {{item.name}} - {{item.description}}
+                </v-list-item-content>
+              </template>
+              <template v-slot:selection="{ item }">
+                <v-list-item-content>
+                  {{item.name}}
+                </v-list-item-content>
+              </template>
+            </v-autocomplete>
+          </v-col>
+        </v-row>
           <h2>Verfügbare Kapazität: <b>{{getFullCapacity() | fancyUnits}}</b><br/></h2>
         <v-row no-gutters>
             <v-col v-if="expertMode === false">
@@ -363,6 +382,8 @@ import 'echarts/lib/component/tooltip';
 import 'echarts/lib/component/legend';
 import createChartData from "@/methods/createChartData";
 import IChart from "@/types/chart/IChart";
+import IFruitSeller from "@/types/IFruitSeller";
+import fruitSellers from "@/preDefined/fruitSellers";
 
 @Component({
 
@@ -407,6 +428,12 @@ export default class Configurator extends Vue{
 
     /*Jobs*/
     allJobs: IJob[] = jobs;
+    fruitSellers: IFruitSeller[] = fruitSellers;
+    currentFruitSeller: IFruitSeller = {
+      name: '',
+      description: '',
+      number: 0
+    };
 
     /*Player informations*/
     playerAmount = 1;
@@ -432,7 +459,6 @@ export default class Configurator extends Vue{
         if(this.expertMode){
           this.expertModeSwitch = true;
         }
-
     }
 
     /***
@@ -588,7 +614,18 @@ export default class Configurator extends Vue{
         //Calculate the time
         const averageCycleAmount = (jobStep.amountOfIngredientsPerCycle[0] + jobStep.amountOfIngredientsPerCycle[1]) / 2;
         const cycleTime = amount * jobStep.cycleTime / averageCycleAmount / this.playerAmount;
-        const vehicleTime = (kmToMiles(jobStep.distanceKm) / this.getAverageSpeed() * 60 * 60);
+        //Obsthändler mit einberechnen
+        let vehicleTime = 0
+        if(this.currentFruitSeller){
+          if(jobStep.fruitSeller && this.currentFruitSeller.number > 0){
+            //Get the current fruitSellerDistance
+            const currentFruitsellerToDistance = jobStep.fruitSellerDistances.filter(fruitSeller => fruitSeller.number === this.currentFruitSeller.number);
+            vehicleTime = (kmToMiles(currentFruitsellerToDistance[0].distanceKm) / this.getAverageSpeed() * 60 * 60);
+          }
+        }
+        else{
+          vehicleTime = (kmToMiles(jobStep.distanceKm) / this.getAverageSpeed() * 60 * 60);
+        }
         const runWayTime = ((jobStep.rundistance) * roundUp(this.currentCapacity /
             (this.currentTrousersCapacity+5000) / this.playerAmount,0));
         const umpackenTime = roundUp((this.currentCapacity / (this.currentTrousersCapacity+5000)
@@ -789,6 +826,7 @@ export default class Configurator extends Vue{
       this.useSchleifenfahrt = cookie.settings.useSchleifenfahrt;
       this.showGraph = cookie.settings.showGraph;
       this.updateGraphOnEveryChange = cookie.settings.updateGraphOnEveryChange;
+      this.currentFruitSeller = cookie.currentFruitSeller;
     }
 
     /***
@@ -814,7 +852,8 @@ export default class Configurator extends Vue{
           showGraph: this.showGraph,
           updateGraphOnEveryChange: this.updateGraphOnEveryChange
         },
-        version: 2
+        currentFruitSeller: this.currentFruitSeller,
+        version: 3
       };
     }
 
