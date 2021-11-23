@@ -169,7 +169,7 @@
           </v-col>
         </v-row>
         <v-row v-if="expertMode">
-          <v-col>
+          <!--<v-col>
             <h2>Obsthändler-Standort:</h2>
             <v-autocomplete v-model="currentFruitSeller" :items="fruitSellers" item-text="name"
                             hide-details outlined solo clearable return-object item-value="number"
@@ -185,7 +185,7 @@
                 </v-list-item-content>
               </template>
             </v-autocomplete>
-          </v-col>
+          </v-col>-->
         </v-row>
           <h2>Verfügbare Kapazität: <b>{{getFullCapacity() | fancyUnits}}</b><br/></h2>
         <v-row no-gutters>
