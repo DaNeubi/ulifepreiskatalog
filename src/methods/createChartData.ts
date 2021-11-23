@@ -1,7 +1,7 @@
 import IJobCalculation from "@/types/IJobCalculation";
 import IChartSeries from "@/types/chart/IChartSeries";
 import IChart from "@/types/chart/IChart";
-import {getDreisatz, getPercentageChange, getPropotion} from "@/utils/percentageCalculation";
+import {getDreisatz} from "@/utils/percentageCalculation";
 import IChartXAxis from "@/types/chart/IChartXAxis";
 import IChartYAxis from "@/types/chart/IChartYAxis";
 
@@ -39,7 +39,6 @@ export default function createChartData(job: IJobCalculation[], timeSpanUnit: st
         xAxisString.push((i+1).toString() + timeSpanUnit);
     }
     //create the data for the yAxis
-    const yAxisString: string[] = ['1000', '5000', '10000'];
     const yAxis: IChartYAxis = {
         type: 'value',
         axisLabel: {

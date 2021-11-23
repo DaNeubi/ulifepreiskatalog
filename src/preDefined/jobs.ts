@@ -7,7 +7,7 @@ const jobs: IJob[] = [
         stepsDescription: "Steinbruch -> Steinrüttler -> Betonmischer -> Baustellenhändler",
         toolRequired: "Spitzhacke",
         stepsAmount: 3,
-        pricePerResource: 88,
+        pricePerResource: 100,
         steps: [
             {
                 sourceName: "Bruchstein",
@@ -16,7 +16,7 @@ const jobs: IJob[] = [
                 cycleTime: 10,
                 ingredientRatio: [1,1],
                 umpackenAvail: false,
-                distanceKm: 3.68,
+                distanceKm: 3.67,
                 rundistance: 3,
                 umpackenTime: 1,
                 fruitSeller: false,
@@ -29,7 +29,7 @@ const jobs: IJob[] = [
                 cycleTime: 10,
                 ingredientRatio: [1,5],
                 umpackenAvail: false,
-                distanceKm: 6.33,
+                distanceKm: 6.30,
                 rundistance: 3,
                 umpackenTime: 1,
                 fruitSeller: false,
@@ -60,7 +60,7 @@ const jobs: IJob[] = [
         stepsDescription: "Ölpumpen -> Öl Aufbereitung -> Raffinerie -> Öl-Ankauf",
         toolRequired: "Spitzhacke",
         stepsAmount: 3,
-        pricePerResource: 35,
+        pricePerResource: 63,
         steps: [
             {
                 sourceName: "Rohöl",
@@ -69,7 +69,7 @@ const jobs: IJob[] = [
                 cycleTime: 4,
                 ingredientRatio: [1,1],
                 umpackenAvail: false,
-                distanceKm: 3.68,
+                distanceKm: 3.6,
                 rundistance: 3,
                 umpackenTime: 1,
                 fruitSeller: false,
@@ -82,7 +82,7 @@ const jobs: IJob[] = [
                 cycleTime: 15,
                 ingredientRatio: [4,2],
                 umpackenAvail: true,
-                distanceKm: 6.3,
+                distanceKm: 6.31,
                 rundistance: 10,
                 umpackenTime: 18,
                 fruitSeller: false,
@@ -113,7 +113,7 @@ const jobs: IJob[] = [
         stepsDescription: "Goldfluss -> Gold Verarbeiter -> Juwelier",
         toolRequired: "Spitzhacke",
         stepsAmount: 2,
-        pricePerResource: 269,
+        pricePerResource: 280,
         steps: [
             {
                 sourceName: "Goldklumpen",
@@ -135,7 +135,7 @@ const jobs: IJob[] = [
                 cycleTime: 30,
                 ingredientRatio: [5,1],
                 umpackenAvail: true,
-                distanceKm: 3.12,
+                distanceKm: 3.14,
                 rundistance: 65,
                 umpackenTime: 18,
                 fruitSeller: false,
@@ -153,7 +153,7 @@ const jobs: IJob[] = [
         stepsDescription: "Getreidefeld -> Getreidemühle -> Bäckerei",
         toolRequired: "Sichel",
         stepsAmount: 2,
-        pricePerResource: 115,
+        pricePerResource: 57,
         steps: [
             {
                 sourceName: "Getreide",
@@ -193,7 +193,7 @@ const jobs: IJob[] = [
         stepsDescription: "Erdbeerfeld -> Obsthändler",
         toolRequired: "Gartenschaufel",
         stepsAmount: 1,
-        pricePerResource: 6,
+        pricePerResource: 4,
         steps: [
             {
                 sourceName: "Erdbeeren",
@@ -233,7 +233,7 @@ const jobs: IJob[] = [
         stepsDescription: "Weintrauben -> Gärtanks -> Abfüllanlage -> Am edlen Tropfen",
         toolRequired: "Sichel",
         stepsAmount: 3,
-        pricePerResource: 183,
+        pricePerResource: 91,
         steps: [
             {
                 sourceName: "Weintrauben",
@@ -286,7 +286,7 @@ const jobs: IJob[] = [
         stepsDescription: "Wald -> Sägewerk -> Schreinerei",
         toolRequired: "Kettensäge",
         stepsAmount: 2,
-        pricePerResource: 93,
+        pricePerResource: 115,
         steps: [
             {
                 sourceName: "Holz",
@@ -326,7 +326,7 @@ const jobs: IJob[] = [
         stepsDescription: "Eisenmine -> Schmelze -> Metallhändler",
         toolRequired: "Spitzhacke",
         stepsAmount: 2,
-        pricePerResource: 155,
+        pricePerResource: 170,
         steps: [
             {
                 sourceName: "Eisenerz",
@@ -366,7 +366,7 @@ const jobs: IJob[] = [
         stepsDescription: "Maisfeld -> Maiskäufer",
         toolRequired: "Sichel",
         stepsAmount: 1,
-        pricePerResource: 5,
+        pricePerResource: 3,
         steps: [
             {
                 sourceName: "Mais",
@@ -393,7 +393,7 @@ const jobs: IJob[] = [
         stepsDescription: "Onkel Joe's Kürbisfarm -> Obsthändler",
         toolRequired: "Gartenschaufel",
         stepsAmount: 1,
-        pricePerResource: 12,
+        pricePerResource: 11,
         steps: [
             {
                 sourceName: "Kürbis",
@@ -433,7 +433,7 @@ const jobs: IJob[] = [
         stepsDescription: "Nussplantage -> Obsthändler",
         toolRequired: "Gartenschaufel",
         stepsAmount: 1,
-        pricePerResource: 5,
+        pricePerResource: 11,
         steps: [
             {
                 sourceName: "Nüsse",
@@ -466,7 +466,60 @@ const jobs: IJob[] = [
         umpackenTime: 12,
         loopDistanceKm: 2.1,
         jobColor: ["#7A5C2F","#C7AE89"]
-    }
+    }/*,
+    {
+        id: 11,
+        name: "Joint",
+        stepsDescription: "Marihuanaplantage -> ???",
+        toolRequired: "Kein Werkzeug",
+        stepsAmount: 3,
+        pricePerResource: 300,
+        steps: [
+            {
+                sourceName: "Marihuanapflanze",
+                amountOfIngredientsPerCycle: [3,4],
+                sizeOfIngredient: 160,
+                cycleTime: 15,
+                ingredientRatio: [1,1],
+                umpackenAvail: false,
+                distanceKm: 0,
+                rundistance: 0,
+                umpackenTime: 1,
+                fruitSeller: false,
+                fruitSellerDistances: []
+            },
+            {
+                sourceName: "Getrocknetes Marihuana",
+                amountOfIngredientsPerCycle: [5,5],
+                sizeOfIngredient: 80,
+                cycleTime: 30,
+                ingredientRatio: [5,5],
+                umpackenAvail: false,
+                distanceKm: 0,
+                rundistance: 0,
+                umpackenTime: 1,
+                fruitSeller: false,
+                fruitSellerDistances: []
+            },
+            {
+                sourceName: "Joint",
+                amountOfIngredientsPerCycle: [1,1],
+                sizeOfIngredient: 100,
+                cycleTime: 20,
+                ingredientRatio: [1,1],
+                umpackenAvail: false,
+                distanceKm: 0,
+                rundistance: 0,
+                umpackenTime: 1,
+                fruitSeller: false,
+                fruitSellerDistances: []
+            }
+        ],
+        rundistance: 0,
+        umpackenTime: 1,
+        loopDistanceKm: 0,
+        jobColor: ["#00802b","#00cc44"]
+    }*/
 ]
 
 export default jobs;

@@ -359,7 +359,6 @@
         <v-col>
           <br/>
           <b>Verbesserungsvorschläge gerne bei mir melden: 555-480-4612</b><br/>
-          <b>Spenden gerne an: LS82172757</b>
         </v-col>
       </v-row>
     </v-container>
@@ -449,7 +448,10 @@ export default class Configurator extends Vue{
           this.saveCookie();
         }
         else{
-          this.loadCookie();
+          if(!this.loadCookie()){
+            this.saveCookie();
+          }
+
         }
 
         //Update the initial capacity
@@ -807,8 +809,14 @@ export default class Configurator extends Vue{
      * Loads the settings from the cookie
      * In fact, you just got pranked! It's local storage not a cookie
      */
-    loadCookie(){
+    loadCookie(): boolean{
       const cookie = JSON.parse(localStorage.settings);
+
+      //check if the version is the same or if a newer version is available
+      if(cookie.version != this.currentCookieVersion()){
+        return false;
+      }
+
       //load the settings
       this.allCars = cookie.vehicles;
       this.allJobs = cookie.jobs;
@@ -827,6 +835,8 @@ export default class Configurator extends Vue{
       this.showGraph = cookie.settings.showGraph;
       this.updateGraphOnEveryChange = cookie.settings.updateGraphOnEveryChange;
       this.currentFruitSeller = cookie.currentFruitSeller;
+
+      return true;
     }
 
     /***
@@ -853,8 +863,15 @@ export default class Configurator extends Vue{
           updateGraphOnEveryChange: this.updateGraphOnEveryChange
         },
         currentFruitSeller: this.currentFruitSeller,
-        version: 3
+        version: this.currentCookieVersion()
       };
+    }
+
+  /***
+   * Returns the current version of the cookie
+   */
+  currentCookieVersion(): number{
+      return 6;
     }
 
   //
@@ -878,6 +895,11 @@ export default class Configurator extends Vue{
       this.expertMode = false;
       this.expertModeSwitch = false;
       this.expertModeDialogAlreadyAccepted = false;
+      this.currentFruitSeller = {
+        name: '',
+        description: '',
+        number: 0
+      };
     }
     //update some stuff
     this.updateAvailableCapacity();
