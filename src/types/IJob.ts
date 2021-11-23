@@ -1,3 +1,5 @@
+import {IFruitSellerDistances} from "@/types/IFruitSeller";
+
 export default interface IJob{
     id: number,
     name: string,
@@ -21,6 +23,7 @@ export interface IJobStep{
     umpackenAvail: boolean,
     distanceKm: number,
     rundistance: number,
-    umpackenTime: number
+    umpackenTime: number,
+    fruitSeller: boolean,
+    fruitSellerDistances: IFruitSellerDistances[]
 }
-
